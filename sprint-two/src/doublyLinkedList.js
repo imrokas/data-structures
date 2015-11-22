@@ -9,6 +9,7 @@ var DoublyLinkedList = function(){
       list.tail = list.head;
     }else{
       list.tail.next = Node(value);
+      list.tail.next.previous = list.tail;
       list.tail = list.tail.next;
     }
   };
@@ -16,24 +17,57 @@ var DoublyLinkedList = function(){
   list.removeHead = function(){
     var temp = list.head.value;
     list.head = list.head.next;
+    if(list.head){
+      list.head.previous = null;
+    }
     return temp;
   };
 
-  list.contains = function(target){
+  list.addToHead = function(value) {
+    if(!list.head){
+      list.head = Node(value);
+      list.tail = list.head;
+    }else{
+      list.head.previous = Node(value);
+      list.head.previous.next = list.head;
+      list.head = list.head.previous;
+    }
+    
+  };
+  list.removeTail = function() {
+    var temp = list.tail.value;
+    list.tail = list.tail.previous;
+    if(list.tail){
+      list.tail.next = null;
+    }
+    return temp;
+  };
+
+  list.search = function(target){
     var tempNode = list.head;
     while(tempNode) {
       if(tempNode.value === target){
-        return true;
+        return tempNode;
       }
       tempNode && (tempNode = tempNode.next);
     }
-    return false;
+    return null;
+  }
+
+  list.contains = function(target){
+    return !!list.search(target);
   };
 
-  list.addToHead = function(value) {
-    
+  list.insert = function(value, beforeValue){
+    var beforeNode = list.search(beforeValue);
+    if(beforeNode){
+      var newNode = Node(value);
+      newNode.next = beforeNode.next;
+      newNode.previous = beforeNode;
+      newNode.next.previous = newNode;
+      beforeNode.next = newNode;
+    }
   };
-  list.removeTail = function() {};
 
   return list;
 };

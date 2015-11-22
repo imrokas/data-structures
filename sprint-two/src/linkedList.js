@@ -19,17 +19,29 @@ var LinkedList = function(){
     return temp;
   };
 
-  list.contains = function(target){
+  list.search = function(target){
     var tempNode = list.head;
     while(tempNode) {
       if(tempNode.value === target){
-        return true;
+        return tempNode;
       }
       tempNode && (tempNode = tempNode.next);
     }
-    return false;
+    return null;
+  }
+
+  list.contains = function(target){
+    return !!list.search(target);
   };
 
+  list.insertAfter = function(value, beforeValue){
+    var beforeNode = list.search(beforeValue);
+    if(beforeNode){
+      var newNode = Node(value);
+      newNode.next = beforeNode.next;
+      beforeNode.next = newNode;
+    }
+  }
   return list;
 };
 
